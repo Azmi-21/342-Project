@@ -4,7 +4,7 @@
 **ClassConnect** is a scheduling and booking system designed to help organizations offer private and group lessons. It allows administrators to manage lesson offerings, instructors to register and accept available sessions, and clients to browse and book lessons. The system supports multiple lesson types, varying time slots, and allows legal guardians to manage bookings for underage clients.
 
 ## UML Use case diagram
-![ClassConnect Use case diagram](Use case diagram 342.jpeg)
+![Use case diagram 342](https://github.com/user-attachments/assets/bd85c959-032d-46f0-9cde-7c837224b63d)
 
 ## Technologies Used
 - **Programming Language**: Java
