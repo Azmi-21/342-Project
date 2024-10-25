@@ -1,3 +1,4 @@
+package java_code;
 public class Client {
     private String name;
     private boolean isUnderage;
