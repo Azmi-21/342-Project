@@ -23,8 +23,48 @@ def main():
         user_input = input("Enter your choice: ")
 
         if user_input == "1":
-            print("You have chosen to sign in as Administrator.")
-           
+            password = input("Enter the password of admin account: ")
+
+            if password == "admin":
+                sentinel_admin = True
+
+                while sentinel_admin:
+                    print("")
+                    print("1: View")
+                    print("2: Delete")
+                    print("8: Local Testing")
+                    print("9: Go Back")
+                    print("")
+                    admin_input = input("Enter your choice: ")
+
+                    if admin_input == "1":
+                        print("1: Client")
+                        print("2: Location")
+                        print("8: Local Testing")
+                        print("9: Go Back")
+                        admin_input_1 = input("Which data you want to view: ")
+
+                        if admin_input_1 == "1":
+                            view_client_data()
+
+                    elif admin_input == "2":
+                        print("1: Client")
+                        print("2: Location")
+                        print("8: Local Testing")
+                        print("9: Go Back")
+                        admin_input_2 = input("Which data you want to delete: ")
+
+                        if admin_input_2 == "1":
+                            client_id = input("Enter client ID that you want to delete: ")
+                            delete_client_record(client_id)
+                            
+
+                    elif admin_input == "9":
+                        sentinel_admin = False
+            else:
+                print("Wrong Password")
+
+                
 
         elif user_input == "2":
 

@@ -24,25 +24,21 @@ def execute_query(profile, query, params=None):
         role=profile['role']
     )
     
-    # Execute the query
     try:
         cursor = conn.cursor()
         if params:
-            cursor.execute(query, params)  # Execute with parameters
+            cursor.execute(query, params)
         else:
-            cursor.execute(query)  # Execute without parameters
-        conn.commit()  # Commit changes for INSERT, UPDATE, DELETE
+            cursor.execute(query)
+        
+        # Check if it's a SELECT query to fetch and return data
+        if query.strip().lower().startswith("select"):
+            results = cursor.fetchall()  # Fetch all results for SELECT
+        else:
+            results = None  # For non-SELECT queries, nothing to return
+            conn.commit()   # Commit changes for INSERT, UPDATE, DELETE
+        return results
+
     finally:
         cursor.close()
         conn.close()
-
-# Define main function
-def main():
-    file_path = "..//dbt//dbt_snowflake_project//profiles.yml"
-    profile = load_profile(file_path)  # Updated path to YAML profile file
-    query = "SELECT * FROM removeme;"
-    execute_query(profile, query)
-
-# Run the script
-if __name__ == '__main__':
-    main()

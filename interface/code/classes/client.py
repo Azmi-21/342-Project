@@ -1,11 +1,13 @@
 import sys
 import os
 import csv
+from tabulate import tabulate # Library for a better visualization of the tables
 
 connection_path = r"..\..\..\database\code"  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
 
 from connection import load_profile, execute_query
+
 
 seed_path = "..//..//database//dbt//dbt_snowflake_project//seeds//client.csv"
 underage_client_seed_path = "..//..//database//dbt//dbt_snowflake_project//seeds//underage_client.csv"
@@ -56,10 +58,19 @@ def add_into_underage_client_seed(new_object):
         
         # Append the new client data directly without adding a newline
         writer.writerow(new_object)  # Append the new client data
-def client_register_message(client_age,):
 
-    print("todo")
+def client_register_message(client_name):
 
+    print(f"{client_name} registered with the system.")
+
+def client_guradian_register_message(guardian_name,underage_client_name,client_age,relation_client_guardian):
+
+    print(f"{guardian_name} registered with the system for his/her {relation_client_guardian} {underage_client_name} (who is {client_age}).")
+
+def get_connection():
+    file_path = "..//..//database//dbt//dbt_snowflake_project//profiles.yml"
+    connection = load_profile(file_path)  # Load the YAML profile file
+    return connection
 
 def create_client():
 
@@ -117,10 +128,12 @@ def create_client():
         new_underage_client_object = [underage_client_id, underage_client_name, client_age, guardian_name, relation_client_guardian] 
         add_into_underage_client_seed( new_underage_client_object)
 
+        client_guradian_register_message(guardian_name,underage_client_name,client_age,relation_client_guardian)
+
     else:
 
         client_name = input("Enter your name: ")
-        
+
         # Set the client_id as appropriate (e.g., fetching the next id from the database)
         client_id = get_last_ID() + 1
         client_guardian = "false"
@@ -135,8 +148,48 @@ def create_client():
         #print(new_object)
         add_into_client_seed(new_object)
 
+        client_register_message(client_name)
 
+def view_client_data():
 
+    connection = get_connection()
+    select_query = "select * from client"
+    results = execute_query(connection, select_query)
+
+    # Check if there are any results
+    if results:
+        headers = ["client_id", "name", "age", "guardian"]  # Update headers if column names change
+        print(tabulate(results, headers=headers, tablefmt="grid"))
+    else:
+        print("No data to display")
+        
+
+def delete_client_record(client_id):
+
+    with open(seed_path, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        data = list(reader)  # Convert to list for easier handling
+    
+    # Check if data has rows and headers
+    if not data or len(data) <= 1:
+        print("No data to delete.")
+        return
+
+    headers = data[0]
+    rows = [row for row in data[1:] if row[0] != str(client_id)]  # Exclude rows with the given client_id
+
+    # Write the updated data back to the file
+    with open(seed_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)  # Write headers
+        writer.writerows(rows)    # Write remaining rows
+
+    # Delete the object in Snowflake database
+    connection = get_connection()
+    delete_query = "DELETE FROM client WHERE client_id = %s;"
+    execute_query(connection, delete_query, (client_id,))
+
+    print(f"Client with ID {client_id} has been deleted.")
 
 def test():
      new_object = [1, "Cristiano Ronaldo", 39, 'false', 'null']
