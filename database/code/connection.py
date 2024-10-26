@@ -12,7 +12,7 @@ def load_profile(file_path):
     return profile['dbt_snowflake_project']['outputs']['dev']
 
 
-def execute_query(profile, query):
+def execute_query(profile, query, params=None):
     # Establish connection
     conn = snowflake.connector.connect(
         account=profile['account'],
@@ -27,10 +27,11 @@ def execute_query(profile, query):
     # Execute the query
     try:
         cursor = conn.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        for row in results:
-            print(row)
+        if params:
+            cursor.execute(query, params)  # Execute with parameters
+        else:
+            cursor.execute(query)  # Execute without parameters
+        conn.commit()  # Commit changes for INSERT, UPDATE, DELETE
     finally:
         cursor.close()
         conn.close()
