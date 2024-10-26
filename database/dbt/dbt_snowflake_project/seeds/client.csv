@@ -1,3 +1,2 @@
-client_id,name,age,isUnderage,guardian
-1,Cristiano Ronaldo,39,false,null
-2,Lionel Messi,14,true,Cristiano Ronaldo3
+client_id,name,age,guardian
+1,Cristiano Ronaldo,39,true
