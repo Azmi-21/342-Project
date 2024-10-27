@@ -5,7 +5,9 @@ connection_path = r"..\..\database\code"  # Ensure this points to the directory 
 sys.path.append(os.path.abspath(connection_path))
 
 from connection import load_profile, execute_query
-from classes.client import *
+from classes.client import * 
+from methods.view_data import *
+from methods.delete_data import *
 
 def main():
 
@@ -16,7 +18,8 @@ def main():
         print("Welcome to the system. Please choose the options:")
         print("==========================================================\n")
         print("1: Sign in as Administrator")
-        print("2: Register as a client")
+        print("2: Register as a Client")
+        print("3. Register as an Intructor")
         print("8: Local Testing")
         print("9: Exit")
 
@@ -40,23 +43,35 @@ def main():
                     if admin_input == "1":
                         print("1: Client")
                         print("2: Location")
+                        print("3: Instructors")
                         print("8: Local Testing")
                         print("9: Go Back")
-                        admin_input_1 = input("Which data you want to view: ")
+                        admin_input_1 = int(input("Which data you want to view: "))
 
-                        if admin_input_1 == "1":
-                            view_client_data()
+                        # Defining the hashmapping to map user input with the tables
+                        hash_input_tables = {1: "client", 2:"location", 3:"instructor", 4:"offering", 5:"booking"}
+                        
+                        # Iterate over each tables to get the good tabel
+                        for i in hash_input_tables:
+                            if admin_input_1 == i:
+                                # View the data of selected table
+                                view_data(hash_input_tables[i])
 
                     elif admin_input == "2":
                         print("1: Client")
-                        print("2: Location")
+                        print("2: Instructor")
                         print("8: Local Testing")
                         print("9: Go Back")
-                        admin_input_2 = input("Which data you want to delete: ")
+                        admin_input_2 = int(input("Which data you want to delete: "))
 
-                        if admin_input_2 == "1":
-                            client_id = input("Enter client ID that you want to delete: ")
-                            delete_client_record(client_id)
+                        hash_input_2_tables = {1: "client", 2:"instructor"}
+
+                        for i in hash_input_2_tables:
+
+                            if admin_input_2 == i:
+                                client_id = input("Enter client ID that you want to delete: ")
+                                # Delete the row from selected table
+                                delete_record(hash_input_2_tables[i],client_id)
                             
 
                     elif admin_input == "9":
