@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(connection_path))
 
 from connection import load_profile, execute_query
 from classes.client import * 
+from classes.instructor import * 
 from methods.view_data import *
 from methods.delete_data import *
 
@@ -85,6 +86,10 @@ def main():
 
             create_client()
        
+        elif user_input == "3":
+            
+            create_instructor()
+            
         elif user_input == "8":
             test()
 
