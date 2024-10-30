@@ -1,7 +1,7 @@
 import sys
 import os
 
-connection_path = r"..\..\database\code"  # Ensure this points to the directory containing connection.py
+connection_path = os.path.join("..", "..", "database", "code")  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
 
 from connection import load_profile, execute_query
