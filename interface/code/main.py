@@ -12,6 +12,8 @@ from methods.delete_data import *
 
 def main():
 
+    signed_in_instructor = None 
+
     sentinel = True
     while sentinel:
         print("\n")
@@ -21,6 +23,7 @@ def main():
         print("1: Sign in as Administrator")
         print("2: Register as a Client")
         print("3. Register as an Intructor")
+        print("4. Sign in as an Intructor")
         print("8: Local Testing")
         print("9: Exit")
 
@@ -89,6 +92,39 @@ def main():
         elif user_input == "3":
             
             create_instructor()
+
+        elif user_input == "4" and not signed_in_instructor:
+            # Sign in as an Instructor
+            name = input("Enter your name: ")
+            phone_number = input("Enter your phone number: ")
+            success, instructor_data = sign_in_instructor(name, phone_number)
+            
+            
+            if success:
+                signed_in_instructor = instructor_data  # Keep track of the signed-in instructor
+            else:
+                print("Sign-in failed. Please try again.")
+
+            sentinel_instructor = True
+            while sentinel_instructor:
+                    print("1: View Offerings that are available")
+                    print("2: Take the offering")
+                    print("8: Local Testing")
+                    print("9: Go Back")
+                    instructor_input = int(input("Select the option that you want to do: "))
+
+                    if instructor_input == 1:
+                        view_available_offerings(signed_in_instructor['instructor_id'])
+
+                    elif instructor_input == 2:
+                        take_offering(signed_in_instructor['instructor_id'], signed_in_instructor['name'])
+
+                    elif instructor_input == 9:
+                        sentinel_instructor = False
+
+        elif user_input == "4" and signed_in_instructor:
+            print("You should log off first!")
+        
             
         elif user_input == "8":
             test()
