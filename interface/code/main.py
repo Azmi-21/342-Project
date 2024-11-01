@@ -7,6 +7,7 @@ sys.path.append(os.path.abspath(connection_path))
 from connection import load_profile, execute_query
 from classes.client import * 
 from classes.instructor import * 
+from classes.administrator import *
 from methods.view_data import *
 from methods.delete_data import *
 
@@ -39,7 +40,7 @@ def main():
                     print("")
                     print("1: View")
                     print("2: Delete")
-                    print("8: Local Testing")
+                    print("3: Create offering")
                     print("9: Go Back")
                     print("")
                     admin_input = input("Enter your choice: ")
@@ -76,7 +77,9 @@ def main():
                                 client_id = input("Enter client ID that you want to delete: ")
                                 # Delete the row from selected table
                                 delete_record(hash_input_2_tables[i],client_id)
-                            
+                    
+                    elif admin_input == "3":
+                        create_offering()
 
                     elif admin_input == "9":
                         sentinel_admin = False
