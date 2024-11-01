@@ -10,6 +10,8 @@ from classes.instructor import *
 from classes.administrator import *
 from methods.view_data import *
 from methods.delete_data import *
+from methods.update_data import *
+from methods.helpers import *
 
 def main():
 
@@ -40,7 +42,8 @@ def main():
                     print("")
                     print("1: View")
                     print("2: Delete")
-                    print("3: Create offering")
+                    print("3. Update")
+                    print("4: Create offering")
                     print("9: Go Back")
                     print("")
                     admin_input = input("Enter your choice: ")
@@ -49,12 +52,15 @@ def main():
                         print("1: Client")
                         print("2: Location")
                         print("3: Instructors")
-                        print("8: Local Testing")
+                        print("4: Offerings")
+                        print("5: Bookings")
+                        print("6: Instructor Cities")
+                        print("7: Underage Clients")
                         print("9: Go Back")
                         admin_input_1 = int(input("Which data you want to view: "))
 
                         # Defining the hashmapping to map user input with the tables
-                        hash_input_tables = {1: "client", 2:"location", 3:"instructor", 4:"offering", 5:"booking"}
+                        hash_input_tables = {1: "client", 2:"location", 3:"instructor", 4:"offering", 5:"booking", 6:"instructor_cities", 7:"underage_client"}
                         
                         # Iterate over each tables to get the good tabel
                         for i in hash_input_tables:
@@ -77,8 +83,15 @@ def main():
                                 client_id = input("Enter client ID that you want to delete: ")
                                 # Delete the row from selected table
                                 delete_record(hash_input_2_tables[i],client_id)
-                    
                     elif admin_input == "3":
+                        table_name = input("Enter the table name you want to update (e.g., 'offering'): ")
+                        row_id = input("Enter the ID of the row you want to update: ")
+                        column_name = input("Enter the name of the column you want to modify: ")
+                        new_value = input("Enter the new value: ")
+                        
+                        update_data(table_name, row_id, column_name, new_value)
+
+                    elif admin_input == "4":
                         create_offering()
 
                     elif admin_input == "9":
