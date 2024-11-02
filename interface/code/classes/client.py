@@ -5,6 +5,7 @@ from tabulate import tabulate # Library for a better visualization of the tables
 from datetime import datetime
 from methods.update_data import *
 from methods.delete_data import *
+from methods.tests.tests import *
 
 connection_path = r"..\..\..\database\code"  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
@@ -256,22 +257,26 @@ def view_client_bookings(client_id):
 
     
 def book_offering(client_id, offering_id):
-    connection = get_connection()
 
-    # Change the date format
+    # Check if the booking are on the same time
+    if not check_existing_booking(client_id, offering_id):
+        print("Booking conflict detected. Cannot book the same day and time slot for the client.")
+        return
+    
+    connection = get_connection()
     booking_date_str = datetime.now().strftime("%d-%m-%Y")
     booking_id = get_last_booking_ID() + 1
 
     # Insert the booking into the database
     query = "INSERT INTO booking (booking_id, client_id, offering_id, bookingDate) VALUES (%s, %s, %s, %s)"
-    execute_query(connection, query, (booking_id,client_id, offering_id, booking_date_str))
+    execute_query(connection, query, (booking_id, client_id, offering_id, booking_date_str))
 
     # Update the offering status to 'Non-Available'
     update_data("offering", offering_id, "status", "Non-Available")
 
     print(f"Offering {offering_id} booked successfully for client ID {client_id} on {booking_date_str}.")
 
-    new_object = [booking_id,client_id,offering_id,booking_date_str]
+    new_object = [booking_id, client_id, offering_id, booking_date_str]
     add_into_booking_seed(new_object)
 
 
