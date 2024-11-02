@@ -234,7 +234,7 @@ def add_offering_seed(offering_id, instructor_name):
         # Copy all rows and update only the selected offering_id row
         for row in reader:
             if row[0] == str(offering_id):  # Check if this row matches the offering_id
-                row[-1] = instructor_name   # Update the instructor column
+                row[-2] = instructor_name   # Update the prelast column (instructor column)
                 updated = True
             writer.writerow(row)
     

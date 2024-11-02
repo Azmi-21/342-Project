@@ -2,6 +2,7 @@ import sys
 import os
 import csv
 from tabulate import tabulate # Library for a better visualization of the tables
+from methods.tests.tests import *
 
 connection_path = r"..\..\..\database\code"  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
@@ -40,9 +41,9 @@ def add_into_offering_seed(new_offering):
         writer.writerow(new_offering)
 
 def create_offering():
-
     connection = get_connection()
-    # Prompt for offering details
+    
+    # Administrator inputs
     offering_id = get_last_ID() + 1
     offering_type = input("Enter the type of offering (e.g., 'Private' or 'Group'): ")
     location = input("Enter the location of the offering (e.g., 'Aquatic Center'): ")
@@ -53,14 +54,20 @@ def create_offering():
     end_time = input("Enter the end time (HH:MM): ")
     status = "Available"
 
+    # Check for conflicts before adding
+    if check_time_slot_conflict(connection, location, day, start_time, end_time):
+        print("Error: The selected time slot conflicts with an existing offering at the same location.")
+        return
+
+    # Insert the offering if no conflict is found
     query = """
     INSERT INTO offering (offering_id, type, location, startDate, endDate, day, startTime, endTime, status)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
+    execute_query(connection, query, (offering_id, offering_type, location, start_date, end_date, day, start_time, end_time, status))
 
-    execute_query(connection,query, (offering_id,offering_type, location, start_date, end_date, day, start_time, end_time, status))
-
-    # Add the new object  to the seed
-    new_offering = [offering_id, offering_type, location, start_date, end_date, day, start_time, end_time, "", status] # Empty string to have a null value for the instructor
+    # Add the new object to the seed
+    new_offering = [offering_id, offering_type, location, start_date, end_date, day, start_time, end_time, "", status]
     add_into_offering_seed(new_offering)
+    print("New offering created successfully.")
 
