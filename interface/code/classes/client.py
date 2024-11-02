@@ -2,6 +2,9 @@ import sys
 import os
 import csv
 from tabulate import tabulate # Library for a better visualization of the tables
+from datetime import datetime
+from methods.update_data import *
+from methods.delete_data import *
 
 connection_path = r"..\..\..\database\code"  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
@@ -11,6 +14,7 @@ from connection import load_profile, execute_query
 
 seed_path = "..//..//database//dbt//dbt_snowflake_project//seeds//client.csv"
 underage_client_seed_path = "..//..//database//dbt//dbt_snowflake_project//seeds//underage_client.csv"
+booking_seed_path = "..//..//database//dbt//dbt_snowflake_project//seeds//booking.csv"
 
 def get_last_ID():
 
@@ -31,6 +35,16 @@ def get_last_underage_client_ID():
             last_seed_ID = int(row['underage_client_id'])  # Get the last ID of the last row
 
     return last_seed_ID
+
+def get_last_booking_ID():
+    last_seed_ID = None
+    with open(booking_seed_path , mode='r', newline='') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            last_seed_ID = int(row['booking_id'])  # Get the last ID of the last row
+
+    return last_seed_ID
+
 
 def add_into_client_seed(new_object):
     # Check if the file exists
@@ -55,6 +69,20 @@ def add_into_underage_client_seed(new_object):
         # Write header only if the file is new
         if not file_exists:
             writer.writerow(['underage_client_id', 'cleint_name', 'age', 'guardian', 'relation'])
+        
+        # Append the new client data directly without adding a newline
+        writer.writerow(new_object)  # Append the new client data
+        
+def add_into_booking_seed(new_object):
+    # Check if the file exists
+    file_exists = os.path.exists(seed_path)
+
+    with open(booking_seed_path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Write header only if the file is new
+        if not file_exists:
+            writer.writerow(["booking_id","client_id","offering_id","bookingDate"])
         
         # Append the new client data directly without adding a newline
         writer.writerow(new_object)  # Append the new client data
@@ -191,6 +219,65 @@ def delete_client_record(client_id):
 
     print(f"Client with ID {client_id} has been deleted.")
 
-def test():
-     new_object = [1, "Cristiano Ronaldo", 39, 'false', 'null']
-     add_into_client_seed(new_object)
+def sign_in_client(name, age):
+    
+    connection = get_connection()
+    
+    # Check if the client exists
+    query = "SELECT * FROM client WHERE name = %s AND age = %s"
+    result = execute_query(connection, query, (name, age))
+    
+    if result:
+        client_data = result[0] 
+        print(f"\nWelcome, {client_data[1]}!\n") 
+        
+        return True, {
+            "client_id": client_data[0],
+            "name": client_data[1],
+            "age": client_data[2],
+            "guardian": client_data[3]
+        }
+    else:
+        print("Client sign-in failed. Please check your credentials.")
+        return False, None
+    
+def view_client_bookings(client_id):
+    connection = get_connection()
+
+    query = "SELECT booking_id, offering_id, bookingDate FROM booking WHERE client_id = %s"
+    results = execute_query(connection, query, (client_id,))
+
+    if results:
+        headers = ["Booking ID", "Offering ID", "Booking Date"]
+        print(tabulate(results, headers=headers, tablefmt="grid"))
+    else:
+        print("No bookings found for this client.")
+
+
+    
+def book_offering(client_id, offering_id):
+    connection = get_connection()
+
+    # Change the date format
+    booking_date_str = datetime.now().strftime("%d-%m-%Y")
+    booking_id = get_last_booking_ID() + 1
+
+    # Insert the booking into the database
+    query = "INSERT INTO booking (booking_id, client_id, offering_id, bookingDate) VALUES (%s, %s, %s, %s)"
+    execute_query(connection, query, (booking_id,client_id, offering_id, booking_date_str))
+
+    # Update the offering status to 'Non-Available'
+    update_data("offering", offering_id, "status", "Non-Available")
+
+    print(f"Offering {offering_id} booked successfully for client ID {client_id} on {booking_date_str}.")
+
+    new_object = [booking_id,client_id,offering_id,booking_date_str]
+    add_into_booking_seed(new_object)
+
+
+def cancel_booking(client_id):
+
+
+    booking_id = input("Enter the booking ID to cancel: ")
+
+    delete_record("booking",booking_id)

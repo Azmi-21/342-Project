@@ -51,16 +51,16 @@ def create_offering():
     day = input("Enter the day of the week (e.g., 'Sunday'): ")
     start_time = input("Enter the start time (HH:MM): ")
     end_time = input("Enter the end time (HH:MM): ")
-    
+    status = "Available"
 
     query = """
-    INSERT INTO offering (offering_id, type, location, startDate, endDate, day, startTime, endTime)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO offering (offering_id, type, location, startDate, endDate, day, startTime, endTime, status)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
     """
 
-    execute_query(connection,query, (offering_id,offering_type, location, start_date, end_date, day, start_time, end_time))
+    execute_query(connection,query, (offering_id,offering_type, location, start_date, end_date, day, start_time, end_time, status))
 
     # Add the new object  to the seed
-    new_offering = [offering_id, offering_type, location, start_date, end_date, day, start_time, end_time, ""] # Empty string to have a null value for the instructor
+    new_offering = [offering_id, offering_type, location, start_date, end_date, day, start_time, end_time, "", status] # Empty string to have a null value for the instructor
     add_into_offering_seed(new_offering)
 

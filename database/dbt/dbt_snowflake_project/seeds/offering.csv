@@ -1,7 +1,8 @@
-offering_id,type,location,startDate,endDate,day,startTime,endTime,instructor
-1,Private,Aquatic Center, 01-09-2024,30-11-2024,Sunday,14:00,16:00,Alimurat
-2,Group, EV-Building,01-09-2024,30-11-2024,Sunday,14:00,16:00,Azmi
-3,Group,Aquatic Center,01-09-2024,30-11-2024,Saturday,11:30,12:30,
-4,Private,Aquatic Center,01-09-2024,30-11-2024,Friday,11:30,12:30,
-5,Private,Complexe Multi-Sports de Laval,01-09-2024,30-11-2024,Friday,08:30,10:30,
-6,Group,EV-Building,01-09-2024,30-11-2024,Wednesday,09:30,11:00,
+offering_id,type,location,startDate,endDate,day,startTime,endTime,instructor,status
+1,Private,Aquatic Center, 01-09-2024,30-11-2024,Sunday,14:00,16:00,Alimurat,Availabe
+2,Group, EV-Building,01-09-2024,30-11-2024,Sunday,14:00,16:00,Azmi,Availabe
+3,Group,Aquatic Center,01-09-2024,30-11-2024,Saturday,11:30,12:30,,Availabe
+4,Private,Aquatic Center,01-09-2024,30-11-2024,Friday,11:30,12:30,,Availabe
+5,Private,Complexe Multi-Sports de Laval,01-09-2024,30-11-2024,Friday,08:30,10:30,,Availabe
+6,Group,EV-Building,01-09-2024,30-11-2024,Wednesday,09:30,11:00,,Availabe
+7,Group,test,test,test,test,test,test,,Non-Available

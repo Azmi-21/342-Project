@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 
 connection_path = os.path.join("..", "..", "database", "code")  # Ensure this points to the directory containing connection.py
 sys.path.append(os.path.abspath(connection_path))
@@ -15,7 +16,8 @@ from methods.helpers import *
 
 def main():
 
-    signed_in_instructor = None 
+    signed_in_instructor = None  # Instructor Session
+    signed_in_client = None # Client Session
 
     sentinel = True
     while sentinel:
@@ -27,6 +29,8 @@ def main():
         print("2: Register as a Client")
         print("3. Register as an Intructor")
         print("4. Sign in as an Intructor")
+        print("5. Sign in as a Client")
+        print("6. View Offerings")
         print("8: Local Testing")
         print("9: Exit")
 
@@ -140,10 +144,47 @@ def main():
 
         elif user_input == "4" and signed_in_instructor:
             print("You should log off first!")
-        
+
+        elif user_input == "5" and not signed_in_client:
+            # Sign in as Client
+            name = input("Enter your name: ")
+            age = input("Enter your age: ")
+            success, client_data = sign_in_client(name, age)
             
-        elif user_input == "8":
-            test()
+            if success:
+                signed_in_client = client_data  # Keep track of signed-in client
+            else:
+                print("Sign-in failed. Please try again.")
+
+            # Menu options for a signed-in client
+            client_menu = True
+            while client_menu and signed_in_client:
+                print("\n1: View My Bookings")
+                print("2: Book an Offering")
+                print("3: Cancel a Booking")
+                print("9: Go Back")
+
+                client_input = input("Choose an option: ")
+
+                if client_input == "1":
+                    view_client_bookings(signed_in_client["client_id"])
+                
+                elif client_input == "2":
+                    view_data("offering")  # Show all available offerings
+                    offering_id = input("Enter offering ID to book: ")
+                    book_offering(signed_in_client["client_id"], offering_id)
+
+                elif client_input == "3":
+                    cancel_booking(signed_in_client["client_id"])
+
+                elif client_input == "9":
+                    client_menu = False  # Exit 
+
+        elif user_input == "5" and signed_in_client:
+            print("You are already signed in as a client. Please log out first.")
+        
+        elif user_input == "6":
+            view_data("offering")
 
         elif user_input == "9":
             print("Exiting the system.")

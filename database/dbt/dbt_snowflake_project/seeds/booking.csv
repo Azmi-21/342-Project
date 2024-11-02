@@ -1,1 +1,2 @@
-booking_id,client_id,offering_id,bookingDate,startTime,endTime
+booking_id,client_id,offering_id,bookingDate
+1,1,7,01-11-2024

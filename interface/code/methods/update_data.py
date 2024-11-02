@@ -23,7 +23,7 @@ def update_data(table_name, row_id, column_name, new_value):
         "client": ["client_id", "name", "age", "guardian"],
         "location": ["location_id", "name", "address"],
         "instructor": ["instructor_id", "name", "phoneNumber", "specialization"],
-        "offering": ["offering_id", "type", "location", "startDate", "endDate", "day", "startTime", "endTime", "instructor"],
+        "offering": ["offering_id", "type", "location", "startDate", "endDate", "day", "startTime", "endTime", "instructor","status"],
         "booking": ["booking_id","client_id","offering_id","bookingDate","startTime","endTime"],
         "instructor_cities": ["instructor_cities_id","instructor_id","instructor","city_name"],
         "underage_client": ["underage_client_id","client_name","age","guardian","relation"]
