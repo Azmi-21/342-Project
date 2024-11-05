@@ -25,11 +25,10 @@
 
 
 ## UML Use case diagram
-![Use case diagram 342](https://github.com/user-attachments/assets/bd85c959-032d-46f0-9cde-7c837224b63d)
+![Use case diagram 342](https://github.com/user-attachments/assets/652978ee-4cb5-45ee-a393-5876ac71983e)
 
 ## Technologies Used
-- **Programming Language**: Java
-- **Framework**: (TBD)
+- **Programming Language**: Java and Python
 - **UML Tools**: Lucidchart
 - **Version Control**: GitHub
 
