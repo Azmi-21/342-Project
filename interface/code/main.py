@@ -31,7 +31,6 @@ def main():
         print("4. Sign in as an Intructor")
         print("5. Sign in as a Client")
         print("6. View Offerings")
-        print("8: Local Testing")
         print("9: Exit")
 
         user_input = input("Enter your choice: ")
