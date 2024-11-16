@@ -74,7 +74,7 @@ def main():
                     elif admin_input == "2":
                         print("1: Client")
                         print("2: Instructor")
-                        print("8: Local Testing")
+                        #print("8: Local Testing")
                         print("9: Go Back")
                         admin_input_2 = int(input("Which data you want to delete: "))
 
@@ -128,7 +128,7 @@ def main():
             while sentinel_instructor:
                     print("1: View Offerings that are available")
                     print("2: Take the offering")
-                    print("8: Local Testing")
+                    #print("8: Local Testing")
                     print("9: Go Back")
                     instructor_input = int(input("Select the option that you want to do: "))
 
